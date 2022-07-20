@@ -316,4 +316,21 @@ mod serial {
             self.inner.bflush().map_err(ForwardError)
         }
     }
+
+    impl<T, E> eh1_0::serial::nb::Write<u8> for Forward<T>
+    where
+        T: eh0_2::serial::Write<u8, Error = E>,
+        E: core::fmt::Debug + eh1_0::serial::Error,
+    {
+        type Error = ForwardError<E>;
+        //type Error = E;
+
+        fn write(&mut self, word: u8) -> Result<(), Self::Error> {
+            self.inner.write(word).map_err(ForwardError)
+        }
+
+        fn flush(&mut self) -> Result<(), Self::Error> {
+            self.inner.flush().map_err(ForwardError)
+        }
+    }
 }
